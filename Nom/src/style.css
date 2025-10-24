@@ -1,0 +1,26 @@
+:root{
+  --black: black;
+  --gray: gray;
+  --white: white;
+  --lightGray: lightgray;
+}
+
+.darkMode{
+  --primary-color: var(--black);
+  --secondary-color: var(--gray);
+}
+
+.lightMode{
+  --primary-color: var(--white);
+  --secondary-color: var(--lightGray);
+}
+
+
+
+
+
+body{
+  background: var(--black);
+
+}
+
