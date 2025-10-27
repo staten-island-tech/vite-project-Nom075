@@ -1,18 +1,13 @@
-:root{
-  --black: black;
-  --gray: gray;
-  --white: white;
-  --lightGray: lightgray;
+.dark{
+  --mainBackground: black;
+  --secondBackground: rgb(255, 255, 255);
+  --textColor: black;
 }
 
-.darkMode{
-  --primary-color: var(--black);
-  --secondary-color: var(--gray);
-}
-
-.lightMode{
-  --primary-color: var(--white);
-  --secondary-color: var(--lightGray);
+.light{
+  --mainBackground: white;
+  --secondBackground: rgb(236, 236, 236);
+  --textColor: black;
 }
 
 
@@ -20,7 +15,34 @@
 
 
 body{
-  background: var(--black);
+  background-color: var(--mainBackground);
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
 
 }
 
+.toolBar{
+  direction: flex;
+  text-align: center;
+  margin: 20px;
+  color: var(--textColor);
+  background-color: var(--secondBackground);
+  width: 1800px;
+  height: auto;
+  padding: 20px;
+  font-size: 40px;
+
+  border-radius: 20px;
+}
+
+
+.mode{
+  width: 100px;
+  height: 100px;
+}
