@@ -41,6 +41,32 @@ body{
   border-radius: 20px;
 }
 
+.Real_Body{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card{
+  display: flex;
+  background-color: var(--secondBackground);
+  width: 500px;
+  height: 500px;
+  align-items:center;
+  flex-direction: column;
+
+}
+
+.card img{
+  width: 80%;
+  height: 60%;
+  display: flex;
+  object-fit: contain;
+  margin: 20px;
+
+}
+
+
 
 .mode{
   width: 100px;
