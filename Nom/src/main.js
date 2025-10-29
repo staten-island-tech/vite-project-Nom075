@@ -12,5 +12,10 @@ function light_and_dark(){
     })
 }
 
+function adopt(){
+    buttons = document.querySelectorAll
+}
+
+
 
 light_and_dark()

@@ -6,8 +6,8 @@
 
 .light{
   --mainBackground: white;
-  --secondBackground: rgb(236, 236, 236);
-  --textColor: black;
+  --secondBackground: rgb(167, 167, 167);
+  --textColor: rgb(255, 255, 255);
 }
 
 
@@ -59,14 +59,22 @@ body{
 
 .card img{
   width: 80%;
-  height: 60%;
+  height: 50%;
   display: flex;
   object-fit: contain;
   margin: 20px;
 
 }
+.card button{
+  width: 200px;
+  height: 40px;
+  margin: 20px;
+}
 
+.card p{
+  font-size: 20px;
 
+}
 
 .mode{
   width: 100px;
