@@ -1,3 +1,22 @@
+let current_pet_info = null
+
+bars = [
+    "Health",
+    "Saturation",
+    "Hydration",
+    "Mental_Health",
+    "Happiness"
+
+]
+
+
+const TICK_RATE = 1000
+let time = 0
+
+//0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
+
+
+
 function light_and_dark(){
     modeBTN = document.querySelector(".mode")
     modeBTN.addEventListener("click", function (){
@@ -12,7 +31,7 @@ function light_and_dark(){
     })
 }
 
-let current_pet_info = null
+
 
 function enter_game(pet_info){
     const Real_body = document.querySelector(".Real_Body")
@@ -26,6 +45,7 @@ function enter_game(pet_info){
         <p>Standard pet.</p>
       </div>   
     `)
+    mainGameLoop()
 }
 
 function adopt(){
@@ -39,7 +59,61 @@ function adopt(){
     })
 }
 
+function mainGameLoop(){
+    console.log("Ahh")
+    time += 1
+    updateStatPercentage(time)
+    
+}
+
+
+
+function updateStatPercentage(time){
+    let selected_bar = null
+    
+    bars.forEach((bar) => {
+        selected_bar = document.querySelector(`#${bar}`)
+        
+        if (bar === "Health"){    
+            if (time%2 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`
+            }
+        }
+        else if(bar === "Saturation"){
+            if (time%3 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`               
+            }
+        }
+        else if (bar === "Hydration"){
+            if (time%4 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`  
+            }
+        }
+        else if (bar === "Mental_Health"){
+            if (time%5 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`
+            }
+        }
+        else if (bar === "Happiness"){
+            if (time%6 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>` 
+            }
+        }
+
+
+
+    
+
+
+        
+
+
+    })
+}
+
 
 
 light_and_dark()
 adopt()
+
+//setInterval(mainGameLoop, TICK_RATE)
