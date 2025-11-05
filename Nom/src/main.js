@@ -1,11 +1,11 @@
 let current_pet_info = null
 
 bars = [
-    "Health",
     "Saturation",
     "Hydration",
     "Mental_Health",
-    "Happiness"
+    "Happiness",
+    "Health"
 
 ]
 
@@ -70,37 +70,48 @@ function mainGameLoop(){
 
 function updateStatPercentage(time){
     let selected_bar = null
+    let fail = 0
     
     bars.forEach((bar) => {
         selected_bar = document.querySelector(`#${bar}`)
         
-        if (bar === "Health"){    
-            if (time%2 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`
-            }
-        }
-        else if(bar === "Saturation"){
-            if (time%3 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`               
+        if(bar === "Saturation"){
+            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+                fail += 1
+            } 
+            else if (time%1 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
             }
         }
         else if (bar === "Hydration"){
-            if (time%4 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`  
+            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+                fail += 1
+            } 
+            else if (time%1 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
             }
         }
         else if (bar === "Mental_Health"){
-            if (time%5 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>`
+            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+                fail += 1
+            } 
+            else if (time%1 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
             }
         }
         else if (bar === "Happiness"){
-            if (time%6 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}</p>` 
+            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+                fail += 1
+            } 
+            else if (time%1 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
             }
         }
-
-
+        else if (bar === "Health"){    
+            console.log(`Fail value: ${fail}`)
+            selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1*fail}%</p>`
+        }
+        
 
     
 
@@ -115,5 +126,4 @@ function updateStatPercentage(time){
 
 light_and_dark()
 adopt()
-
 //setInterval(mainGameLoop, TICK_RATE)
