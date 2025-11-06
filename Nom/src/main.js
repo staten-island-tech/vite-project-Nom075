@@ -1,11 +1,31 @@
 let current_pet_info = null
 
-bars = [
+const bars = [
     "Saturation",
     "Hydration",
     "Mental_Health",
     "Happiness",
     "Health"
+
+]
+
+const shop = [
+    {
+        Name: "Header", 
+        image: "src/Assets/duck.jpg", 
+        description: "Description"
+    },    
+    {
+        Name: "Header", 
+        image: "src/Assets/duck.jpg", 
+        description: "Description"
+    },    
+    {
+        Name: "Header", 
+        image: "src/Assets/duck.jpg", 
+        description: "Description"
+    },
+
 
 ]
 
@@ -45,7 +65,49 @@ function enter_game(pet_info){
         <p>Standard pet.</p>
       </div>   
     `)
-    mainGameLoop()
+    Real_body.insertAdjacentHTML("afterend", 
+        `
+            <div class = "infoBars">
+                <div class = "bar" id = "Health"><p>Health: 100%</p></div>
+                <div class = "bar" id = "Saturation"><p>Saturation: 100%</p></div>
+                <div class = "bar" id = "Hydration"><p>Hydration: 100%</p></div>
+                <div class = "bar" id = "Mental_Health"><p>Mental_Health: 100%</p></div>
+                <div class = "bar" id = "Happiness"><p>Happiness: 100%</p></div>
+            </div> 
+        
+        `
+    )
+    const infoBars = document.querySelector(".infoBars")
+
+    infoBars.insertAdjacentHTML("afterend", 
+        `
+            <div class = "filter_buttons">
+                <button class = "filter">Shop</button>
+                <button class = "filter">Inventory</button>
+                <button class = "filter">Money</button>
+            </div>  
+        `
+    )
+    
+    
+    shop.forEach((item) => {
+        document.querySelector(".items").insertAdjacentHTML("beforeend", 
+            `
+            <div class = "item_card">
+                <h2>${item.Name}</h2>
+                <img src = "${item.image}">
+                <p>${item.description}</p>
+                <button>Could be a button</button>
+            </div> 
+            
+            
+            `)
+    })
+
+
+
+
+    setInterval(mainGameLoop, TICK_RATE)
 }
 
 function adopt(){
@@ -79,8 +141,8 @@ function updateStatPercentage(time){
             if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
                 fail += 1
             } 
-            else if (time%1 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
+            else if (time%2 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
             }
         }
         else if (bar === "Hydration"){
@@ -88,37 +150,29 @@ function updateStatPercentage(time){
                 fail += 1
             } 
             else if (time%1 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
             }
         }
         else if (bar === "Mental_Health"){
             if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
                 fail += 1
             } 
-            else if (time%1 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
+            else if (time%3 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
             }
         }
         else if (bar === "Happiness"){
             if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
                 fail += 1
             } 
-            else if (time%1 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 10}%</p>`
+            else if (time%4 === 0){
+                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
             }
         }
         else if (bar === "Health"){    
             console.log(`Fail value: ${fail}`)
             selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1*fail}%</p>`
         }
-        
-
-    
-
-
-        
-
-
     })
 }
 
@@ -126,4 +180,4 @@ function updateStatPercentage(time){
 
 light_and_dark()
 adopt()
-//setInterval(mainGameLoop, TICK_RATE)
+

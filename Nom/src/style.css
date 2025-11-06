@@ -1,13 +1,17 @@
 .dark{
   --mainBackground: black;
-  --secondBackground: rgb(255, 255, 255);
-  --textColor: black;
+  --secondBackground: rgb(51, 95, 182);
+  --textColor: white;
+  --buttonBackground: white;
+  --buttonBorder: rgb(152, 229, 255);;
 }
 
 .light{
   --mainBackground: white;
-  --secondBackground: rgb(167, 167, 167);
-  --textColor: rgb(255, 255, 255);
+  --secondBackground: rgb(169, 228, 255);
+  --textColor: rgb(25, 119, 207);
+  --buttonBackground: white;
+  --buttonBorder: rgb(31, 195, 232);
 }
 
 
@@ -48,7 +52,36 @@ body{
   justify-content: center;
 }
 
-.infoBars{
+.items{
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: red;
+  justify-self: center;
+  margin-top: 10px;
+}
+
+.item_card{
+  width: 19%;
+  height: 250px;
+  background-color: pink;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+
+.item_card img{
+  width: 70%;
+  height: 100px;
+}
+
+
+
+.infoBars, .filter_buttons{
   width: 90%;
   display: flex;
   height: 300px;
@@ -58,6 +91,21 @@ body{
   background-color: var(--secondBackground);
   margin-top: 10px;
   border-radius: 10px;
+}
+
+.filter_buttons{
+  height: 100px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.filter{
+  width: 100px;
+  height: 50px;
+  margin: 10px;
+  justify-content: center;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 .bar{
@@ -76,6 +124,7 @@ body{
   align-self: center;
   margin-left: 10px;
   margin-right: 10px;
+  color: var(--textColor);
 }
 
 
@@ -105,7 +154,11 @@ body{
 
 .card p{
   font-size: 20px;
+  color: var(--textColor);
+}
 
+.card h1{
+  color: var(--textColor);
 }
 
 .mode{
@@ -113,4 +166,17 @@ body{
   height: 100px;
 }
 
+
+button {
+  background-color: var(--buttonBackground);
+  border-color: var(--buttonBorder);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: rgb(27, 31, 134);
+}
+
+button:hover{
+  background-color: rgb(50, 238, 255);
+  transform: scale(1.2);
+
+}
 
