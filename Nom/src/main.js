@@ -9,25 +9,37 @@ const bars = [
 
 ]
 
-const shop = [
+const Shop = [
     {
         Name: "Header", 
         image: "src/Assets/duck.jpg", 
-        description: "Description"
+        description: "Description",
     },    
     {
         Name: "Header", 
         image: "src/Assets/duck.jpg", 
-        description: "Description"
+        description: "Description",
     },    
     {
         Name: "Header", 
         image: "src/Assets/duck.jpg", 
         description: "Description"
     },
-
-
 ]
+
+const inventory = [
+    {
+        Name: "Vial of Burger", 
+        image: "src/Assets/duck.jpg", 
+        description: "Use this to restore Saturation",
+    },    
+    {
+        Name: "Vial of Juice", 
+        image: "src/Assets/duck.jpg", 
+        description: "Use this to restore Hydration",
+    },    
+]
+
 
 
 const TICK_RATE = 1000
@@ -36,7 +48,7 @@ let time = 0
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
 
 
-
+//light and dark
 function light_and_dark(){
     modeBTN = document.querySelector(".mode")
     modeBTN.addEventListener("click", function (){
@@ -52,7 +64,7 @@ function light_and_dark(){
 }
 
 
-
+//initial game start page and UI
 function enter_game(pet_info){
     const Real_body = document.querySelector(".Real_Body")
     document.querySelector(".toolBar").children[0].textContent = `This is your pet: ${current_pet_info.children[0].textContent}`
@@ -88,28 +100,52 @@ function enter_game(pet_info){
             </div>  
         `
     )
-    
-    
-    shop.forEach((item) => {
-        document.querySelector(".items").insertAdjacentHTML("beforeend", 
+
+    filter_stuff(Shop, "Shop", "Click here to buy this!")
+    filter_stuff(inventory, "Inventory", "Click here to use this item!")
+
+    setInterval(mainGameLoop, TICK_RATE)
+}
+
+//activates shop stuff
+function filter_stuff(list, filter_type, buttonText){
+    const filter_buttons = Array.from(document.querySelectorAll(".filter"))
+    btn = filter_buttons.find((btn) => btn.textContent === filter_type)
+    btn.addEventListener("click", function(){
+        document.querySelector(".items").innerHTML = " "
+        
+        list.forEach((item) => {
+            document.querySelector(".items").insertAdjacentHTML("beforeend", 
             `
             <div class = "item_card">
                 <h2>${item.Name}</h2>
                 <img src = "${item.image}">
                 <p>${item.description}</p>
-                <button>Could be a button</button>
+                <button>${buttonText}</button>
             </div> 
-            
-            
-            `)
+                
+                
+                `)
+        })
+
+    //activate the buttons
+    if (filter_type === "Shop"){
+        activateButtonShop()
+    } else if (filter_type === "Inventory"){
+        activateButtonInventory()
+    }
     })
-
-
-
-
-    setInterval(mainGameLoop, TICK_RATE)
 }
 
+function activateButtonShop(){
+    console.log("Shop")
+}
+
+function activateButtonInventory(){
+    console.log("INV")
+}
+
+//When the button for adopton is clicked, trigger and start the game!
 function adopt(){
     buttons = document.querySelectorAll(".Adopt")
     buttons.forEach((btn) => {
@@ -121,6 +157,7 @@ function adopt(){
     })
 }
 
+//runs the important functions in the game loop
 function mainGameLoop(){
     console.log("Ahh")
     time += 1
@@ -129,7 +166,7 @@ function mainGameLoop(){
 }
 
 
-
+//Update all of the main bars. Passive decrease stuff
 function updateStatPercentage(time){
     let selected_bar = null
     let fail = 0
