@@ -4,6 +4,7 @@
   --textColor: white;
   --buttonBackground: white;
   --buttonBorder: rgb(152, 229, 255);;
+  --shopCardBackground: rgb(68, 199, 243);
 }
 
 .light{
@@ -12,6 +13,7 @@
   --textColor: rgb(25, 119, 207);
   --buttonBackground: white;
   --buttonBorder: rgb(31, 195, 232);
+  --shopCardBackground: rgb(174, 243, 255);
 }
 
 
@@ -58,7 +60,7 @@ body{
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: red;
+  background-color: var(--secondBackground);
   justify-self: center;
   margin-top: 10px;
 }
@@ -66,7 +68,8 @@ body{
 .item_card{
   width: 19%;
   height: 250px;
-  background-color: pink;
+  background-color: var(--shopCardBackground);
+  color: var(--textColor);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,7 +78,7 @@ body{
 }
 
 .item_card img{
-  width: 70%;
+  width: 125px;
   height: 100px;
 }
 
@@ -99,7 +102,7 @@ body{
   align-items: center;
 }
 
-.filter{
+.filter, .filter_butMoney{
   width: 100px;
   height: 50px;
   margin: 10px;

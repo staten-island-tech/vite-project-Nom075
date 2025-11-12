@@ -1,5 +1,3 @@
-let current_pet_info = null
-
 const bars = [
     "Saturation",
     "Hydration",
@@ -11,37 +9,32 @@ const bars = [
 
 const Shop = [
     {
-        Name: "Header", 
-        image: "src/Assets/duck.jpg", 
-        description: "Description",
-    },    
-    {
-        Name: "Header", 
-        image: "src/Assets/duck.jpg", 
-        description: "Description",
-    },    
-    {
-        Name: "Header", 
-        image: "src/Assets/duck.jpg", 
-        description: "Description"
-    },
-]
-
-const inventory = [
-    {
         Name: "Vial of Burger", 
         image: "src/Assets/duck.jpg", 
-        description: "Use this to restore Saturation",
+        description: "Burger, 10",
+        price: 10,
     },    
     {
         Name: "Vial of Juice", 
         image: "src/Assets/duck.jpg", 
-        description: "Use this to restore Hydration",
+        description: "Juice, 10",
+        price: 10,
     },    
+    {
+        Name: "Toy", 
+        image: "src/Assets/duck.jpg", 
+        description: "Toy, 10",
+        price: 10,
+    },
+]
+
+const inventory = [
+  
 ]
 
 
-
+let current_pet_info = null
+let Money = 67
 const TICK_RATE = 1000
 let time = 0
 
@@ -96,13 +89,14 @@ function enter_game(pet_info){
             <div class = "filter_buttons">
                 <button class = "filter">Shop</button>
                 <button class = "filter">Inventory</button>
-                <button class = "filter">Money</button>
+                <button class = "filter_butMoney">Money</button>
             </div>  
         `
     )
 
     filter_stuff(Shop, "Shop", "Click here to buy this!")
     filter_stuff(inventory, "Inventory", "Click here to use this item!")
+    filter_MoneyTab()
 
     setInterval(mainGameLoop, TICK_RATE)
 }
@@ -121,7 +115,7 @@ function filter_stuff(list, filter_type, buttonText){
                 <h2>${item.Name}</h2>
                 <img src = "${item.image}">
                 <p>${item.description}</p>
-                <button>${buttonText}</button>
+                <button class = "${filter_type}itemButton">${buttonText}</button>
             </div> 
                 
                 
@@ -137,8 +131,31 @@ function filter_stuff(list, filter_type, buttonText){
     })
 }
 
+function filter_MoneyTab(){
+    const button = document.querySelector(".filter_butMoney")
+    button.addEventListener("click", function(){
+        document.querySelector(".items").innerHTML = ""
+        document.querySelector(".items").insertAdjacentHTML("beforeend", 
+            `
+            <div class = "item_card">
+                <h2>B-B-Bank UwU</h2>
+                <img src = "src/Assets/Bank.png">
+                <p>You so broke, you only have $${Money} LOL!</p>
+            </div> 
+                
+                
+                `)
+    })
+}
+
+
 function activateButtonShop(){
-    console.log("Shop")
+    allItemButton = document.querySelectorAll(".ShopitemButton")
+    allItemButton.forEach((btn) => {
+        btn.addEventListener("click", function(){
+            console.log(btn.closest(".item_card").children[0])
+        })
+    })
 }
 
 function activateButtonInventory(){
