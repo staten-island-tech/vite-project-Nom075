@@ -1,5 +1,5 @@
 .dark{
-  --mainBackground: black;
+  --mainBackground: black;     
   --secondBackground: rgb(51, 95, 182);
   --textColor: white;
   --buttonBackground: white;
@@ -16,7 +16,17 @@
   --shopCardBackground: rgb(174, 243, 255);
 }
 
+/*    
+mainBackground: The overall background of the entire page
+secondBackground: The mainbackground of the UI and stuff
+textColor: What do you think this does
+buttonBackground: I wonder what it does
+buttonBorder: ...
+shopCardBackground: Each item's background in the shop
 
+
+
+*/
 
 
 

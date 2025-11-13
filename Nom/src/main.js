@@ -34,7 +34,7 @@ const inventory = [
 
 
 let current_pet_info = null
-let Money = 1000909090707070769054984784876458757964976457684587645876576
+let Money = 67
 const TICK_RATE = 1000
 let time = 0
 
