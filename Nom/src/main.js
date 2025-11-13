@@ -34,7 +34,7 @@ const inventory = [
 
 
 let current_pet_info = null
-let Money = 67
+let Money = 1000909090707070769054984784876458757964976457684587645876576
 const TICK_RATE = 1000
 let time = 0
 
@@ -45,7 +45,6 @@ let time = 0
 function light_and_dark(){
     modeBTN = document.querySelector(".mode")
     modeBTN.addEventListener("click", function (){
-    console.log("test")
         if (document.body.classList.contains("dark")){
             document.body.classList.add("light")
             document.body.classList.remove("dark")
@@ -62,7 +61,6 @@ function enter_game(pet_info){
     const Real_body = document.querySelector(".Real_Body")
     document.querySelector(".toolBar").children[0].textContent = `This is your pet: ${current_pet_info.children[0].textContent}`
     Real_body.innerHTML = ""
-    console.log(pet_info)
     Real_body.insertAdjacentHTML("afterbegin", ` 
       <div class = "card">
         <h1>${pet_info.children[0].textContent}</h1>
@@ -78,6 +76,7 @@ function enter_game(pet_info){
                 <div class = "bar" id = "Hydration"><p>Hydration: 100%</p></div>
                 <div class = "bar" id = "Mental_Health"><p>Mental_Health: 100%</p></div>
                 <div class = "bar" id = "Happiness"><p>Happiness: 100%</p></div>
+                <div class = "bar" id = "Money"><p>Money: $${Money}</p></div>
             </div> 
         
         `
@@ -153,10 +152,39 @@ function activateButtonShop(){
     allItemButton = document.querySelectorAll(".ShopitemButton")
     allItemButton.forEach((btn) => {
         btn.addEventListener("click", function(){
-            console.log(btn.closest(".item_card").children[0])
+            const card = btn.closest(".item_card")
+            //children 0: HeaderH2
+            //children 1: Image
+            //children 2: Description
+            //children 3: Button
+            const shopCard = Shop.find((items) => items.Name === card.children[0].textContent)
+            const subtractMoney = shopCard.price
+            moneyBarUpdate(subtractMoney, shopCard)
+
+
         })
     })
 }
+
+function moneyBarUpdate(subtractMoney, shopCard){
+    if (Money - subtractMoney > 0){
+        Money -= subtractMoney
+        const selected_bar = document.querySelector("#Money")
+        selected_bar.innerHTML = `<p>Money: $${Money}</p>`
+
+        inventory.push(
+            {
+                Name: `${shopCard.Name}`, 
+                image: `${shopCard.image}`, 
+                description: `${shopCard.description}`,
+            },    
+
+                
+            )
+    }
+
+}
+
 
 function activateButtonInventory(){
     console.log("INV")
@@ -176,7 +204,6 @@ function adopt(){
 
 //runs the important functions in the game loop
 function mainGameLoop(){
-    console.log("Ahh")
     time += 1
     updateStatPercentage(time)
     
@@ -224,7 +251,6 @@ function updateStatPercentage(time){
             }
         }
         else if (bar === "Health"){    
-            console.log(`Fail value: ${fail}`)
             selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1*fail}%</p>`
         }
     })
