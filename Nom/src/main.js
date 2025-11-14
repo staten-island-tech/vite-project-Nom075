@@ -93,33 +93,51 @@ function enter_game(pet_info){
         `
     )
 
-    filter_stuff(Shop, "Shop", "Click here to buy this!")
-    filter_stuff(inventory, "Inventory", "Click here to use this item!")
+    filter_stuff(Shop, "Shop")
+    filter_stuff(inventory, "Inventory")
     filter_MoneyTab()
 
     setInterval(mainGameLoop, TICK_RATE)
 }
 
 //activates shop stuff
-function filter_stuff(list, filter_type, buttonText){
+function filter_stuff(list, filter_type){
     const filter_buttons = Array.from(document.querySelectorAll(".filter"))
     btn = filter_buttons.find((btn) => btn.textContent === filter_type)
     btn.addEventListener("click", function(){
         document.querySelector(".items").innerHTML = " "
         
-        list.forEach((item) => {
-            document.querySelector(".items").insertAdjacentHTML("beforeend", 
-            `
-            <div class = "item_card">
-                <h2>${item.Name}</h2>
-                <img src = "${item.image}">
-                <p>${item.description}</p>
-                <button class = "${filter_type}itemButton">${buttonText}</button>
-            </div> 
-                
-                
-                `)
-        })
+        if (filter_type === "Shop"){
+            list.forEach((item) => {
+                document.querySelector(".items").insertAdjacentHTML("beforeend", 
+                `
+                <div class = "item_card">
+                    <h2>${item.Name}</h2>
+                    <img src = "${item.image}">
+                    <p>${item.description}</p>
+                    <p>Buy it for only $${item.price}</p>
+                    <button class = "ShopitemButton">Click here to buy this!</button>
+                </div> 
+                    
+                    
+                    `)
+            })
+        } else{
+            list.forEach((item) => {
+                document.querySelector(".items").insertAdjacentHTML("beforeend", 
+                `
+                <div class = "item_card">
+                    <h2>${item.Name}</h2>
+                    <img src = "${item.image}">
+                    <p>${item.description}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <button class = "InventoryitemButton">Click here to use this item!</button>
+                </div> 
+                    
+                    
+                    `)
+            })
+        }
 
     //activate the buttons
     if (filter_type === "Shop"){
@@ -159,28 +177,52 @@ function activateButtonShop(){
             //children 3: Button
             const shopCard = Shop.find((items) => items.Name === card.children[0].textContent)
             const subtractMoney = shopCard.price
+
+            if ((inventory.length > 0) && (Money - subtractMoney > 0)){
+                inventory.forEach((item)=> {
+                    if ((item.Name === shopCard.Name)){
+                        item.quantity += 1
+                        console.log("valid")
+                    } else if (inventory.length === 0){
+                        inventory.push(
+                        {
+                            Name: `${shopCard.Name}`, 
+                            image: `${shopCard.image}`, 
+                            description: `${shopCard.description}`,
+                            quantity: 1
+                        },    
+
+                            
+                    )
+                    }
+                })
+            } else if (Money - subtractMoney > 0){
+                inventory.push(
+                    {
+                        Name: `${shopCard.Name}`, 
+                        image: `${shopCard.image}`, 
+                        description: `${shopCard.description}`,
+                        quantity: 1
+                    },    
+
+                            
+                ) 
+            }
+
             moneyBarUpdate(subtractMoney, shopCard)
+
+
 
 
         })
     })
 }
 
-function moneyBarUpdate(subtractMoney, shopCard){
+function moneyBarUpdate(subtractMoney){
     if (Money - subtractMoney > 0){
         Money -= subtractMoney
         const selected_bar = document.querySelector("#Money")
         selected_bar.innerHTML = `<p>Money: $${Money}</p>`
-
-        inventory.push(
-            {
-                Name: `${shopCard.Name}`, 
-                image: `${shopCard.image}`, 
-                description: `${shopCard.description}`,
-            },    
-
-                
-            )
     }
 
 }

@@ -77,14 +77,22 @@ body{
 
 .item_card{
   width: 19%;
-  height: 250px;
+  height: 270px;
   background-color: var(--shopCardBackground);
   color: var(--textColor);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: none;
   align-items: center;
   margin: 15px;
+}
+
+.item_card p{
+  margin: 5px
+}
+
+.item_card button{
+  margin-top: 10px;
 }
 
 .item_card img{
