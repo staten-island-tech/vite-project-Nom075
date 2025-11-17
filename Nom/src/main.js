@@ -34,7 +34,7 @@ const inventory = [
 
 
 let current_pet_info = null
-let Money = 67
+let Money = 6777
 const TICK_RATE = 1000
 let time = 0
 
@@ -178,45 +178,41 @@ function activateButtonShop(){
             const shopCard = Shop.find((items) => items.Name === card.children[0].textContent)
             const subtractMoney = shopCard.price
 
-            if ((inventory.length > 0) && (Money - subtractMoney > 0)){
-                inventory.forEach((item)=> {
-                    if ((item.Name === shopCard.Name)){
-                        item.quantity += 1
-                        console.log("valid")
-                    } else if (inventory.length === 0){
-                        inventory.push(
-                        {
-                            Name: `${shopCard.Name}`, 
-                            image: `${shopCard.image}`, 
-                            description: `${shopCard.description}`,
-                            quantity: 1
-                        },    
-
-                            
-                    )
-                    }
-                })
-            } else if (Money - subtractMoney > 0){
+            if (inventory.length === 0){
                 inventory.push(
                     {
-                        Name: `${shopCard.Name}`, 
-                        image: `${shopCard.image}`, 
-                        description: `${shopCard.description}`,
-                        quantity: 1
-                    },    
-
-                            
-                ) 
+                        Name: shopCard.Name,
+                        image: shopCard.image,
+                        quantity: 1,
+                        description: shopCard.description
+                    }
+                )
+            } else{
+                const why = inventory_isFound(shopCard)
+                console.log(why)
             }
+            console.log(inventory)
 
             moneyBarUpdate(subtractMoney, shopCard)
-
-
-
 
         })
     })
 }
+
+function inventory_isFound(shopCard){
+    let isFound = null
+    inventory.forEach((inventory_item) => {
+    if (shopCard.Name === inventory_item.Name){
+        inventory_item.quantity += 1
+        isFound = true
+    } else{
+        isFound = false
+        }
+    })
+    return isFound
+}
+
+
 
 function moneyBarUpdate(subtractMoney){
     if (Money - subtractMoney > 0){
