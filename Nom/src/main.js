@@ -188,8 +188,23 @@ function activateButtonShop(){
                     }
                 )
             } else{
-                const why = inventory_isFound(shopCard)
-                console.log(why)
+                const isFound = inventory_isFound(shopCard)
+                console.log(isFound)
+                if (isFound === false){
+                    inventory.push(
+                    {
+                        Name: shopCard.Name,
+                        image: shopCard.image,
+                        quantity: 1,
+                        description: shopCard.description
+                    }
+                        )
+                } else if (isFound === true){
+                    (inventory.find((item) => shopCard.Name === item.Name)).quantity += 1
+                }
+
+
+
             }
             console.log(inventory)
 
@@ -200,14 +215,12 @@ function activateButtonShop(){
 }
 
 function inventory_isFound(shopCard){
-    let isFound = null
+    let isFound = false
+    
     inventory.forEach((inventory_item) => {
     if (shopCard.Name === inventory_item.Name){
-        inventory_item.quantity += 1
         isFound = true
-    } else{
-        isFound = false
-        }
+    }
     })
     return isFound
 }
