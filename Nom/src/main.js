@@ -238,7 +238,23 @@ function moneyBarUpdate(subtractMoney){
 
 
 function activateButtonInventory(){
-    console.log("INV")
+    allInvButton = Array.from(document.querySelectorAll(".InventoryitemButton"))
+    allInvButton.forEach((btn) => {
+        btn.addEventListener("click", function(){
+            const card = btn.closest(".item_card")
+            inventory_item = inventory.find((item) => card.children[0] === item.Name)
+            console.log(inventory_item)
+            console.log(`${inventory_item.Name} has been used`)
+
+            //BUG HERE APPAPRENTLY IVENTORY ITEM IS NOT FOUND AND UNDEFINED
+            if (inventory_item.quantity > 1){
+                inventory_item.quantity -= 1
+            } else if (inventory_item.quantity === 1){
+                card.remove()
+                inventory_item.quantity -= 1
+            }
+        })
+    })
 }
 
 //When the button for adopton is clicked, trigger and start the game!
