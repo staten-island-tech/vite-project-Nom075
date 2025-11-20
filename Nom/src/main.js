@@ -13,20 +13,32 @@ const Shop = [
         image: "src/Assets/duck.jpg", 
         description: "Burger, 10",
         price: 10,
+        use: {target: "Saturation", effect: 10}
     },    
     {
         Name: "Vial of Juice", 
         image: "src/Assets/duck.jpg", 
         description: "Juice, 10",
         price: 10,
+        use: {target: "Hydration", effect: 10}
     },    
     {
         Name: "Toy", 
         image: "src/Assets/duck.jpg", 
         description: "Toy, 10",
         price: 10,
+        use: {target: "Mental_Health", effect: 10}
     },
 ]
+
+let Health = 100
+let Saturation = 100
+let Hydration = 100
+let Mental_Health = 100
+let Happiness = 100
+
+
+
 
 const inventory = [
   
@@ -184,7 +196,8 @@ function activateButtonShop(){
                         Name: shopCard.Name,
                         image: shopCard.image,
                         quantity: 1,
-                        description: shopCard.description
+                        description: shopCard.description,
+                        use: shopCard.use,
                     }
                 )
             } else{
@@ -196,7 +209,8 @@ function activateButtonShop(){
                         Name: shopCard.Name,
                         image: shopCard.image,
                         quantity: 1,
-                        description: shopCard.description
+                        description: shopCard.description,
+                        use: shopCard.use,
                     }
                         )
                 } else if (isFound === true){
@@ -240,24 +254,27 @@ function moneyBarUpdate(subtractMoney){
 function activateButtonInventory(){
     allInvButton = Array.from(document.querySelectorAll(".InventoryitemButton"))
     allInvButton.forEach((btn) => {
-        btn.addEventListener("click", function(){
-            const card = btn.closest(".item_card")
-            inventory_item = inventory.find((item) => card.children[0] === item.Name)
-            console.log(inventory_item)
-            console.log(`${inventory_item.Name} has been used`)
+        btn.addEventListener("click", function(event){
+            const card = event.target.closest(".item_card")
+            inventory_item = inventory.find((item) => card.children[0].textContent === item.Name)
 
-            //BUG HERE APPAPRENTLY IVENTORY ITEM IS NOT FOUND AND UNDEFINED
             if (inventory_item.quantity > 1){
                 inventory_item.quantity -= 1
+                card.children[3].textContent = `Quantity: ${inventory_item.quantity}`
+                inventory_item.use.target += inventory_item.use.effect
+
+
             } else if (inventory_item.quantity === 1){
+                const index = inventory.indexOf(inventory_item)
+                inventory.splice(index, 1)
                 card.remove()
-                inventory_item.quantity -= 1
+                
             }
         })
     })
 }
 
-//When the button for adopton is clicked, trigger and start the game!
+//When the button for adoption is clicked, trigger and start the game!
 function adopt(){
     buttons = document.querySelectorAll(".Adopt")
     buttons.forEach((btn) => {
@@ -286,39 +303,44 @@ function updateStatPercentage(time){
         selected_bar = document.querySelector(`#${bar}`)
         
         if(bar === "Saturation"){
-            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+            if (Saturation === 0){
                 fail += 1
             } 
             else if (time%2 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
+                Saturation -= 1
+                selected_bar.innerHTML = `<p>${bar}: ${Saturation}%</p>`
             }
         }
         else if (bar === "Hydration"){
-            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+            if (Hydration === 0){
                 fail += 1
             } 
             else if (time%1 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
+                Hydration -= 1
+                selected_bar.innerHTML = `<p>${bar}: ${Hydration}%</p>`
             }
         }
         else if (bar === "Mental_Health"){
-            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+            if (Mental_Health === 0){
                 fail += 1
             } 
             else if (time%3 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
+                Mental_Health -= 1
+                selected_bar.innerHTML = `<p>${bar}: ${Mental_Health}%</p>`
             }
         }
         else if (bar === "Happiness"){
-            if (parseInt(selected_bar.textContent.split(" ")[1]) === 0){
+            if (Happiness === 0){
                 fail += 1
             } 
             else if (time%4 === 0){
-                selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1}%</p>`
+                Happiness -= 1
+                selected_bar.innerHTML = `<p>${bar}: ${Happiness}%</p>`
             }
         }
         else if (bar === "Health"){    
-            selected_bar.innerHTML = `<p>${bar}: ${parseInt(selected_bar.textContent.split(" ")[1]) - 1*fail}%</p>`
+            Health -= fail
+            selected_bar.innerHTML = `<p>${bar}: ${Health}%</p>`
         }
     })
 }
