@@ -29,6 +29,20 @@ const Shop = [
         price: 10,
         use: {target: "Mental_Health", effect: 10}
     },
+    {
+        Name: "Chao Jie", 
+        image: "src/Assets/duck.jpg", 
+        description: "Chaojie, 10",
+        price: 10,
+        use: {target: "Happiness", effect: 10}
+    },
+    {
+        Name: "Vial of Health", 
+        image: "src/Assets/duck.jpg", 
+        description: "Vial of Health, 10",
+        price: 10,
+        use: {target: "Health", effect: 10}
+    },
 ]
 
 let Health = 100
@@ -36,6 +50,7 @@ let Saturation = 100
 let Hydration = 100
 let Mental_Health = 100
 let Happiness = 100
+let passive_income = 1
 
 
 
@@ -47,7 +62,7 @@ const inventory = [
 
 let current_pet_info = null
 let Money = 6777
-const TICK_RATE = 1000
+const TICK_RATE = 100
 let time = 0
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
@@ -167,10 +182,15 @@ function filter_MoneyTab(){
         document.querySelector(".items").insertAdjacentHTML("beforeend", 
             `
             <div class = "item_card">
+                <h2>Passive Income</h2>
+                <img src = "src/Assets/Bank.png">
+                <p>Earning $${passive_income} per second.</p>
+            </div>
+            <div class = "item_card">
                 <h2>B-B-Bank UwU</h2>
                 <img src = "src/Assets/Bank.png">
                 <p>You so broke, you only have $${Money} LOL!</p>
-            </div> 
+            </div>
                 
                 
                 `)
@@ -261,7 +281,45 @@ function activateButtonInventory(){
             if (inventory_item.quantity > 1){
                 inventory_item.quantity -= 1
                 card.children[3].textContent = `Quantity: ${inventory_item.quantity}`
-                inventory_item.use.target += inventory_item.use.effect
+
+                const selected_bar = document.querySelector(`#${inventory_item.use.target}`)
+                if (inventory_item.use.target === "Saturation"){
+                    if ( Saturation + inventory_item.use.effect > 100){
+                        Saturation = 100
+                    } else{
+                        Saturation += inventory_item.use.effect
+                    }
+                    selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Saturation}%</p>`
+                } else if (inventory_item.use.target === "Hydration"){
+                    if (Hydration + inventory_item.use.effect > 100){
+                        Hydration = 100
+                    } else{
+                        Hydration += inventory_item.use.effect
+                    }
+                    selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Hydration}%</p>`
+                } else if (inventory_item.use.target === "Mental_Health"){
+                    if (Mental_Health + inventory_item.use.effect > 100){
+                        Mental_Health = 100
+                    } else{
+                        Mental_Health += inventory_item.use.effect
+                    }
+                    
+                    selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Mental_Health}%</p>`
+                }else if (inventory_item.use.target === "Happiness"){
+                    if (Happiness + inventory_item.use.effect > 100){
+                        Happiness = 100
+                    } else{
+                        Happiness += inventory_item.use.effect
+                    }
+                    selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Happiness}%</p>`
+                }else if (inventory_item.use.target === "Health"){
+                    if (Health + inventory_item.use.effect > 100){
+                        Health = 100
+                    } else{
+                        Health += inventory_item.use.effect
+                    }
+                    selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Health}%</p>`
+                }
 
 
             } else if (inventory_item.quantity === 1){
@@ -290,6 +348,7 @@ function adopt(){
 function mainGameLoop(){
     time += 1
     updateStatPercentage(time)
+    moneyBarUpdate(-passive_income)
     
 }
 
