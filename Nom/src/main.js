@@ -62,7 +62,7 @@ const inventory = [
 
 let current_pet_info = null
 let Money = 6777
-const TICK_RATE = 100
+const TICK_RATE = 700
 let time = 0
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
