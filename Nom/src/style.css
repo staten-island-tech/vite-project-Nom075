@@ -77,7 +77,7 @@ body{
 
 .item_card{
   width: 19%;
-  height: 270px;
+  height: 350px;
   background-color: var(--shopCardBackground);
   color: var(--textColor);
   display: flex;
@@ -97,7 +97,7 @@ body{
 
 .item_card img{
   width: 125px;
-  height: 100px;
+  height: 125px;
 }
 
 

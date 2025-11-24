@@ -9,36 +9,50 @@ const bars = [
 
 const Shop = [
     {
-        Name: "Vial of Burger", 
-        image: "src/Assets/duck.jpg", 
-        description: "Burger, 10",
+        Name: "Cookie", 
+        image: "src/Assets/Food/cookie.png", 
+        description: "Just a cookie that restores saturation by 5.",
         price: 10,
-        use: {target: "Saturation", effect: 10}
-    },    
+        use: {target: "Saturation", effect: 5}
+    }, 
+/*     {
+        Name: "Vial of Burger", 
+        image: "src/Assets/Food/burger-bottle.png", 
+        description: "Burger in a vial. Restores saturation by 20.",
+        price: 30,
+        use: {target: "Saturation", effect: 20}
+    },  
+    {
+        Name: "Golden Carrot", 
+        image: "src/Assets/Food/GOLDcarrot.png", 
+        description: "Burger in a vial. Restores saturation by 75.",
+        price: 100,
+        use: {target: "Saturation", effect: 75}
+    },  */   
     {
         Name: "Vial of Juice", 
-        image: "src/Assets/duck.jpg", 
+        image: "src/Assets/other/duck.jpg", 
         description: "Juice, 10",
         price: 10,
         use: {target: "Hydration", effect: 10}
     },    
     {
         Name: "Toy", 
-        image: "src/Assets/duck.jpg", 
+        image: "src/Assets/other/duck.jpg", 
         description: "Toy, 10",
         price: 10,
         use: {target: "Mental_Health", effect: 10}
     },
     {
         Name: "Chao Jie", 
-        image: "src/Assets/duck.jpg", 
+        image: "src/Assets/other/duck.jpg", 
         description: "Chaojie, 10",
         price: 10,
         use: {target: "Happiness", effect: 10}
     },
     {
         Name: "Vial of Health", 
-        image: "src/Assets/duck.jpg", 
+        image: "src/Assets/other/duck.jpg", 
         description: "Vial of Health, 10",
         price: 10,
         use: {target: "Health", effect: 10}
@@ -61,8 +75,8 @@ const inventory = [
 
 
 let current_pet_info = null
-let Money = 6777
-const TICK_RATE = 700
+let Money = 0
+const TICK_RATE = 300
 let time = 0
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
@@ -91,7 +105,7 @@ function enter_game(pet_info){
     Real_body.insertAdjacentHTML("afterbegin", ` 
       <div class = "card">
         <h1>${pet_info.children[0].textContent}</h1>
-        <img src = "src/Assets/duck.jpg"/>
+        <img src = "src/Assets/pets/duck.jpg"/>
         <p>Standard pet.</p>
       </div>   
     `)
@@ -142,7 +156,7 @@ function filter_stuff(list, filter_type){
                     <h2>${item.Name}</h2>
                     <img src = "${item.image}">
                     <p>${item.description}</p>
-                    <p>Buy it for only $${item.price}</p>
+                    <p>Buy it for only $${item.price}!</p>
                     <button class = "ShopitemButton">Click here to buy this!</button>
                 </div> 
                     
@@ -183,13 +197,8 @@ function filter_MoneyTab(){
             `
             <div class = "item_card">
                 <h2>Passive Income</h2>
-                <img src = "src/Assets/Bank.png">
+                <img src = "src/Assets/other/Bank.png">
                 <p>Earning $${passive_income} per second.</p>
-            </div>
-            <div class = "item_card">
-                <h2>B-B-Bank UwU</h2>
-                <img src = "src/Assets/Bank.png">
-                <p>You so broke, you only have $${Money} LOL!</p>
             </div>
                 
                 
