@@ -10,49 +10,49 @@ const bars = [
 const Shop = [
     {
         Name: "Cookie", 
-        image: "src/Assets/Food/cookie.png", 
+        image: "Food/cookie.png", 
         description: "Just a cookie that restores saturation by 5.",
         price: 10,
         use: {target: "Saturation", effect: 5}
     }, 
 /*     {
         Name: "Vial of Burger", 
-        image: "src/Assets/Food/burger-bottle.png", 
+        image: "Food/burger-bottle.png", 
         description: "Burger in a vial. Restores saturation by 20.",
         price: 30,
         use: {target: "Saturation", effect: 20}
     },  
     {
         Name: "Golden Carrot", 
-        image: "src/Assets/Food/GOLDcarrot.png", 
+        image: "Food/GOLDcarrot.png", 
         description: "Burger in a vial. Restores saturation by 75.",
         price: 100,
         use: {target: "Saturation", effect: 75}
     },  */   
     {
         Name: "Vial of Juice", 
-        image: "src/Assets/other/duck.jpg", 
+        image: "other/duck.jpg", 
         description: "Juice, 10",
         price: 10,
         use: {target: "Hydration", effect: 10}
     },    
     {
         Name: "Toy", 
-        image: "src/Assets/other/duck.jpg", 
+        image: "other/duck.jpg", 
         description: "Toy, 10",
         price: 10,
         use: {target: "Mental_Health", effect: 10}
     },
     {
         Name: "Chao Jie", 
-        image: "src/Assets/other/duck.jpg", 
+        image: "other/duck.jpg", 
         description: "Chaojie, 10",
         price: 10,
         use: {target: "Happiness", effect: 10}
     },
     {
         Name: "Vial of Health", 
-        image: "src/Assets/other/duck.jpg", 
+        image: "other/duck.jpg", 
         description: "Vial of Health, 10",
         price: 10,
         use: {target: "Health", effect: 10}
@@ -105,7 +105,7 @@ function enter_game(pet_info){
     Real_body.insertAdjacentHTML("afterbegin", ` 
       <div class = "card">
         <h1>${pet_info.children[0].textContent}</h1>
-        <img src = "src/Assets/pets/duck.jpg"/>
+        <img src = "pets/duck.jpg"/>
         <p>Standard pet.</p>
       </div>   
     `)
@@ -197,7 +197,7 @@ function filter_MoneyTab(){
             `
             <div class = "item_card">
                 <h2>Passive Income</h2>
-                <img src = "src/Assets/other/Bank.png">
+                <img src = "other/Bank.png">
                 <p>Earning $${passive_income} per second.</p>
             </div>
                 
