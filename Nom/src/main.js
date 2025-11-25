@@ -11,30 +11,37 @@ const Shop = [
     {
         Name: "Cookie", 
         image: "Food/cookie.png", 
-        description: "Just a cookie that restores saturation by 5.",
+        description: "Just a cookie that restores saturation by 5%.",
         price: 10,
         use: {target: "Saturation", effect: 5}
     }, 
-/*     {
+    {
         Name: "Vial of Burger", 
         image: "Food/burger-bottle.png", 
-        description: "Burger in a vial. Restores saturation by 20.",
+        description: "Burger in a vial. Restores saturation by 20%.",
         price: 30,
         use: {target: "Saturation", effect: 20}
     },  
     {
         Name: "Golden Carrot", 
         image: "Food/GOLDcarrot.png", 
-        description: "Burger in a vial. Restores saturation by 75.",
+        description: "Burger in a vial. Restores saturation by 75%.",
         price: 100,
         use: {target: "Saturation", effect: 75}
-    },  */   
+    }, 
+    {
+        Name: "Mystery Meat", 
+        image: "Food/MysteryMeat.png", 
+        description: "This might get you more hungry...",
+        price: 2,
+        use: {target: "Saturation", effect: 1}
+    },     
     {
         Name: "Vial of Juice", 
-        image: "other/duck.jpg", 
-        description: "Juice, 10",
-        price: 10,
-        use: {target: "Hydration", effect: 10}
+        image: "drinks/Vial_of_Juice.png", 
+        description: "Probably Orange Juice. Restores hydration by 15%.",
+        price: 6,
+        use: {target: "Hydration", effect: 15}
     },    
     {
         Name: "Toy", 
@@ -45,7 +52,7 @@ const Shop = [
     },
     {
         Name: "Chao Jie", 
-        image: "other/duck.jpg", 
+        image: "happy/ChaoJie.png", 
         description: "Chaojie, 10",
         price: 10,
         use: {target: "Happiness", effect: 10}
@@ -64,7 +71,7 @@ let Saturation = 100
 let Hydration = 100
 let Mental_Health = 100
 let Happiness = 100
-let passive_income = 1
+let passive_income = 10
 
 
 
@@ -76,7 +83,7 @@ const inventory = [
 
 let current_pet_info = null
 let Money = 0
-const TICK_RATE = 300
+const TICK_RATE = 1000
 let time = 0
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
@@ -218,36 +225,34 @@ function activateButtonShop(){
             //children 3: Button
             const shopCard = Shop.find((items) => items.Name === card.children[0].textContent)
             const subtractMoney = shopCard.price
-
-            if (inventory.length === 0){
-                inventory.push(
-                    {
-                        Name: shopCard.Name,
-                        image: shopCard.image,
-                        quantity: 1,
-                        description: shopCard.description,
-                        use: shopCard.use,
-                    }
-                )
-            } else{
-                const isFound = inventory_isFound(shopCard)
-                console.log(isFound)
-                if (isFound === false){
+            if (Money - subtractMoney >= 0){
+                if (inventory.length === 0){
                     inventory.push(
-                    {
-                        Name: shopCard.Name,
-                        image: shopCard.image,
-                        quantity: 1,
-                        description: shopCard.description,
-                        use: shopCard.use,
+                        {
+                            Name: shopCard.Name,
+                            image: shopCard.image,
+                            quantity: 1,
+                            description: shopCard.description,
+                            use: shopCard.use,
+                        }
+                    )
+                } else{
+                    const isFound = inventory_isFound(shopCard)
+                    console.log(isFound)
+                    if (isFound === false){
+                        inventory.push(
+                        {
+                            Name: shopCard.Name,
+                            image: shopCard.image,
+                            quantity: 1,
+                            description: shopCard.description,
+                            use: shopCard.use,
+                        }
+                            )
+                    } else if (isFound === true){
+                        (inventory.find((item) => shopCard.Name === item.Name)).quantity += 1
                     }
-                        )
-                } else if (isFound === true){
-                    (inventory.find((item) => shopCard.Name === item.Name)).quantity += 1
                 }
-
-
-
             }
             console.log(inventory)
 
@@ -271,7 +276,7 @@ function inventory_isFound(shopCard){
 
 
 function moneyBarUpdate(subtractMoney){
-    if (Money - subtractMoney > 0){
+    if (Money - subtractMoney >= 0){
         Money -= subtractMoney
         const selected_bar = document.querySelector("#Money")
         selected_bar.innerHTML = `<p>Money: $${Money}</p>`
@@ -293,10 +298,17 @@ function activateButtonInventory(){
 
                 const selected_bar = document.querySelector(`#${inventory_item.use.target}`)
                 if (inventory_item.use.target === "Saturation"){
-                    if ( Saturation + inventory_item.use.effect > 100){
+                    if ((Saturation + inventory_item.use.effect > 100) && !(inventory_item.Name === "Mystery Meat")){
                         Saturation = 100
                     } else{
-                        Saturation += inventory_item.use.effect
+                        if (inventory_item.Name === "Mystery Meat"){
+                            Saturation += Math.round((Math.random()*20)-12)
+                            //HELP HELP HELP BUGGY AFFFFFFF
+                            //THE HOUSE ALWAYS WINS
+                        } else{
+                            Saturation += inventory_item.use.effect
+                        }
+                        
                     }
                     selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Saturation}%</p>`
                 } else if (inventory_item.use.target === "Hydration"){
