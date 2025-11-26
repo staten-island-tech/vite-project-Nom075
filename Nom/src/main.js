@@ -25,7 +25,7 @@ const Shop = [
     {
         Name: "Golden Carrot", 
         image: "Food/GOLDcarrot.png", 
-        description: "Burger in a vial. Restores saturation by 75%.",
+        description: "Burger in a vial. Saturation +75%.",
         price: 100,
         use: {target: "Saturation", effect: 75}
     }, 
@@ -33,16 +33,30 @@ const Shop = [
         Name: "Mystery Meat", 
         image: "Food/MysteryMeat.png", 
         description: "This might get you more hungry...",
-        price: 2,
+        price: 3,
         use: {target: "Saturation", effect: 1}
     },     
     {
         Name: "Vial of Juice", 
         image: "drinks/Vial_of_Juice.png", 
-        description: "Probably Orange Juice. Restores hydration by 15%.",
+        description: "Orange Juice? Hydration +15%.",
         price: 6,
         use: {target: "Hydration", effect: 15}
-    },    
+    }, 
+    {
+        Name: "Elixir of Water", 
+        image: "drinks/water.png", 
+        description: "I think it's water... Hydration +75%" ,
+        price: 27,
+        use: {target: "Hydration", effect: 75}
+    },
+    {
+        Name: "Bag of Blood", 
+        image: "drinks/Blood.png", 
+        description: "Don't drink this",
+        price: 64,
+        use: {target: "Health", effect: 10}
+    },       
     {
         Name: "Toy", 
         image: "other/duck.jpg", 
@@ -66,12 +80,12 @@ const Shop = [
     },
 ]
 
-let Health = 100
+let Health = 10
 let Saturation = 100
 let Hydration = 100
 let Mental_Health = 100
 let Happiness = 100
-let passive_income = 10
+let passive_income = 100
 
 
 
@@ -119,11 +133,11 @@ function enter_game(pet_info){
     Real_body.insertAdjacentHTML("afterend", 
         `
             <div class = "infoBars">
-                <div class = "bar" id = "Health"><p>Health: 100%</p></div>
-                <div class = "bar" id = "Saturation"><p>Saturation: 100%</p></div>
-                <div class = "bar" id = "Hydration"><p>Hydration: 100%</p></div>
-                <div class = "bar" id = "Mental_Health"><p>Mental_Health: 100%</p></div>
-                <div class = "bar" id = "Happiness"><p>Happiness: 100%</p></div>
+                <div class = "bar" id = "Health"><p>Health: ${Health}%</p></div>
+                <div class = "bar" id = "Saturation"><p>Saturation: ${Saturation}%</p></div>
+                <div class = "bar" id = "Hydration"><p>Hydration: ${Hydration}%</p></div>
+                <div class = "bar" id = "Mental_Health"><p>Mental_Health: ${Mental_Health}%</p></div>
+                <div class = "bar" id = "Happiness"><p>Happiness: ${Happiness}%</p></div>
                 <div class = "bar" id = "Money"><p>Money: $${Money}</p></div>
             </div> 
         
@@ -298,18 +312,19 @@ function activateButtonInventory(){
 
                 const selected_bar = document.querySelector(`#${inventory_item.use.target}`)
                 if (inventory_item.use.target === "Saturation"){
-                    if ((Saturation + inventory_item.use.effect > 100) && !(inventory_item.Name === "Mystery Meat")){
-                        Saturation = 100
-                    } else{
                         if (inventory_item.Name === "Mystery Meat"){
-                            Saturation += Math.round((Math.random()*20)-12)
-                            //HELP HELP HELP BUGGY AFFFFFFF
-                            //THE HOUSE ALWAYS WINS
+                            Saturation += Math.round((Math.random()*20)-11)
                         } else{
                             Saturation += inventory_item.use.effect
                         }
                         
-                    }
+                        
+                        if (Saturation > 100){
+                            Saturation = 100
+                        } else if (Saturation < 0){
+                            Saturation = 0
+                        }
+
                     selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Saturation}%</p>`
                 } else if (inventory_item.use.target === "Hydration"){
                     if (Hydration + inventory_item.use.effect > 100){
