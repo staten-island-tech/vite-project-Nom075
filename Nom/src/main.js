@@ -80,6 +80,34 @@ const Shop = [
     },
 ]
 
+const pets = [
+    {
+        name: "Aaron the Rubber Duck",
+        image: "pets/duck.jpg",
+        description: "Standard Pet.",
+        health: 100,
+        saturation: 100,
+        hydration: 100,
+        happiness: 100,
+        mental_health: 100,
+        index: 0
+    },
+    {
+        name: "Darwen from the Zoo",
+        image: "pets/duck.jpg",
+        description: "Standard Pet.",
+        health: 50,
+        s: 100,
+        h: 100,
+        ha: 100,
+        mh: 100,
+        index: 0
+    }
+
+
+]
+
+
 let Health = 10
 let Saturation = 100
 let Hydration = 100
@@ -120,16 +148,21 @@ function light_and_dark(){
 
 //initial game start page and UI
 function enter_game(pet_info){
+    const petFromList = pets.find((pet) => pet_info.children[0].textContent === pet.name)
+
+    
     const Real_body = document.querySelector(".Real_Body")
-    document.querySelector(".toolBar").children[0].textContent = `This is your pet: ${current_pet_info.children[0].textContent}`
+    document.querySelector(".toolBar").children[0].textContent = `This is your pet: ${petFromList.name}`
     Real_body.innerHTML = ""
     Real_body.insertAdjacentHTML("afterbegin", ` 
       <div class = "card">
-        <h1>${pet_info.children[0].textContent}</h1>
-        <img src = "pets/duck.jpg"/>
-        <p>Standard pet.</p>
+        <h1>${petFromList.name}</h1>
+        <img src = "${petFromList.image}">
+        <p>${petFromList.description}</p>
       </div>   
     `)
+
+
     Real_body.insertAdjacentHTML("afterend", 
         `
             <div class = "infoBars">
@@ -252,7 +285,6 @@ function activateButtonShop(){
                     )
                 } else{
                     const isFound = inventory_isFound(shopCard)
-                    console.log(isFound)
                     if (isFound === false){
                         inventory.push(
                         {
@@ -268,7 +300,6 @@ function activateButtonShop(){
                     }
                 }
             }
-            console.log(inventory)
 
             moneyBarUpdate(subtractMoney, shopCard)
 
@@ -370,6 +401,20 @@ function activateButtonInventory(){
 
 //When the button for adoption is clicked, trigger and start the game!
 function adopt(){
+    pets.forEach(pet => {
+        document.querySelector(".Real_Body").insertAdjacentHTML("beforeend", 
+            `<div class = "card">
+            <h1>${pet.name}</h1>
+            <img src = "${pet.image}"/>
+            <p>${pet.description}</p>
+            <button class = "Adopt">Adopt!</button>
+            </div>` 
+        )
+        console.log(pet.image)
+
+    })
+    
+    
     buttons = document.querySelectorAll(".Adopt")
     buttons.forEach((btn) => {
         btn.addEventListener("click", function(event){
