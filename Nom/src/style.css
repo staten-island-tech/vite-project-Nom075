@@ -155,7 +155,13 @@ body{
   height: 500px;
   align-items:center;
   flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
 
+.card p{
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .card img{

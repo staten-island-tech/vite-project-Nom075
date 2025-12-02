@@ -84,24 +84,50 @@ const pets = [
     {
         name: "Aaron the Rubber Duck",
         image: "pets/duck.jpg",
-        description: "Standard Pet.",
+        description: "Your standard pet! He is normal, and does not require too much to maintain!",
         health: 100,
+        heR: 1,
         saturation: 100,
+        sR: 2,
         hydration: 100,
+        hyR: 1,
         happiness: 100,
+        haR: 3,
         mental_health: 100,
+        mhR: 4,
         index: 0
     },
     {
-        name: "Darwen from the Zoo",
-        image: "pets/duck.jpg",
-        description: "Standard Pet.",
-        health: 50,
-        s: 100,
-        h: 100,
-        ha: 100,
-        mh: 100,
-        index: 0
+        name: "Megaback Chao Jie",
+        image: "pets/ChaoJie.png",
+        description: "Very fat and LOVES eating bakesale items... Feed him CONSTANTLY!",
+        health: 80,
+        heR: 0.5,
+        saturation: 90,
+        sR: 0.5,
+        hydration: 70,
+        hyR: 1,
+        happiness: 100,
+        haR: 5,
+        mental_health: 99,
+        mhR: 2,
+        index: 1
+    },
+    {
+        name: "Darwen Zoo",
+        image: "pets/darwen.webp",
+        description: "This guy is just mad his project isn't better than mine, so remember to keep him happy!",
+        health: 80,
+        heR: 1,
+        saturation: 75,
+        sR: 1,
+        hydration: 75,
+        hyR: 1,
+        happiness: 50,
+        haR: 0.5,
+        mental_health: 30,
+        mhR: 0.5,
+        index: 1
     }
 
 
@@ -150,6 +176,19 @@ function light_and_dark(){
 function enter_game(pet_info){
     const petFromList = pets.find((pet) => pet_info.children[0].textContent === pet.name)
 
+    Health = petFromList.health
+    Saturation = petFromList.saturation
+    Hydration = petFromList.hydration
+    Happiness = petFromList.happiness
+    Mental_Health = petFromList.mental_health
+    
+    heathRate = petFromList.heR
+    saturationRate = petFromList.sR
+    hydrationRate = petFromList.hyR
+    happyRate = petFromList.haR
+    mentalRate = petFromList.mhR
+
+
     
     const Real_body = document.querySelector(".Real_Body")
     document.querySelector(".toolBar").children[0].textContent = `This is your pet: ${petFromList.name}`
@@ -192,7 +231,7 @@ function enter_game(pet_info){
     filter_stuff(inventory, "Inventory")
     filter_MoneyTab()
 
-    setInterval(mainGameLoop, TICK_RATE)
+    setInterval(mainGameLoop, (TICK_RATE)/10)
 }
 
 //activates shop stuff
@@ -427,9 +466,10 @@ function adopt(){
 
 //runs the important functions in the game loop
 function mainGameLoop(){
-    time += 1
+    time += 0.1
     updateStatPercentage(time)
-    moneyBarUpdate(-passive_income)
+    moneyBarUpdate((-passive_income)/10)
+    console.log(Saturation)
     
 }
 
@@ -442,12 +482,14 @@ function updateStatPercentage(time){
     bars.forEach((bar) => {
         selected_bar = document.querySelector(`#${bar}`)
         
+        console.log(time, time%(saturationRate))
         if(bar === "Saturation"){
             if (Saturation === 0){
                 fail += 1
             } 
-            else if (time%2 === 0){
+            else if (time%(saturationRate) === 0){
                 Saturation -= 1
+                console.log("trigger")
                 selected_bar.innerHTML = `<p>${bar}: ${Saturation}%</p>`
             }
         }
@@ -455,7 +497,7 @@ function updateStatPercentage(time){
             if (Hydration === 0){
                 fail += 1
             } 
-            else if (time%1 === 0){
+            else if (time%(hydrationRate) === 0){
                 Hydration -= 1
                 selected_bar.innerHTML = `<p>${bar}: ${Hydration}%</p>`
             }
@@ -464,7 +506,7 @@ function updateStatPercentage(time){
             if (Mental_Health === 0){
                 fail += 1
             } 
-            else if (time%3 === 0){
+            else if (time%(mentalRate) === 0){
                 Mental_Health -= 1
                 selected_bar.innerHTML = `<p>${bar}: ${Mental_Health}%</p>`
             }
@@ -473,12 +515,12 @@ function updateStatPercentage(time){
             if (Happiness === 0){
                 fail += 1
             } 
-            else if (time%4 === 0){
+            else if (time%(happyRate) === 0){
                 Happiness -= 1
                 selected_bar.innerHTML = `<p>${bar}: ${Happiness}%</p>`
             }
         }
-        else if (bar === "Health"){    
+        else if ((bar === "Health") && (time%(heathRate) === 0)){    
             Health -= fail
             selected_bar.innerHTML = `<p>${bar}: ${Health}%</p>`
         }
