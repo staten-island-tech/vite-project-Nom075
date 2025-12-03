@@ -3,9 +3,10 @@ const bars = [
     "Hydration",
     "Mental_Health",
     "Happiness",
-    "Health"
-
+    "Health",
 ]
+
+
 
 const Shop = [
     {
@@ -95,7 +96,7 @@ const pets = [
         haR: 3,
         mental_health: 100,
         mhR: 4,
-        index: 0
+        special: "none",
     },
     {
         name: "Megaback Chao Jie",
@@ -108,10 +109,10 @@ const pets = [
         hydration: 70,
         hyR: 1,
         happiness: 100,
-        haR: 5,
+        haR: 3.5,
         mental_health: 99,
-        mhR: 2,
-        index: 1
+        mhR: 3,
+        special: "none",
     },
     {
         name: "Darwen Zoo",
@@ -120,14 +121,30 @@ const pets = [
         health: 80,
         heR: 1,
         saturation: 75,
-        sR: 1,
+        sR: 1.5,
         hydration: 75,
         hyR: 1,
         happiness: 50,
         haR: 0.5,
         mental_health: 30,
-        mhR: 0.5,
-        index: 1
+        mhR: 0.8,
+        special: "none",
+    },
+    {
+        name: "The Chosen One",
+        image: "pets/ChosenOne.jpg",
+        description: "YOU have been cursed with the final plague. Every 5 seconds, the plague gets stronger and stronger...",
+        health: 100,
+        heR: 0.5,
+        saturation: 100,
+        sR: 1.5,
+        hydration: 100,
+        hyR: 1,
+        happiness: 100,
+        haR: 2,
+        mental_health: 100,
+        mhR: 2.5,
+        special: "plague",
     }
 
 
@@ -153,6 +170,7 @@ let current_pet_info = null
 let Money = 0
 const TICK_RATE = 1000
 let time = 0
+let special = "none"
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
 
@@ -182,11 +200,13 @@ function enter_game(pet_info){
     Happiness = petFromList.happiness
     Mental_Health = petFromList.mental_health
     
-    heathRate = petFromList.heR
-    saturationRate = petFromList.sR
-    hydrationRate = petFromList.hyR
-    happyRate = petFromList.haR
-    mentalRate = petFromList.mhR
+    heathRate = petFromList.heR*10
+    saturationRate = petFromList.sR*10
+    hydrationRate = petFromList.hyR*10
+    happyRate = petFromList.haR*10
+    mentalRate = petFromList.mhR*10
+
+    special = petFromList.special
 
 
     
@@ -449,7 +469,6 @@ function adopt(){
             <button class = "Adopt">Adopt!</button>
             </div>` 
         )
-        console.log(pet.image)
 
     })
     
@@ -466,10 +485,9 @@ function adopt(){
 
 //runs the important functions in the game loop
 function mainGameLoop(){
-    time += 0.1
+    time += 1
     updateStatPercentage(time)
     moneyBarUpdate((-passive_income)/10)
-    console.log(Saturation)
     
 }
 
@@ -482,14 +500,12 @@ function updateStatPercentage(time){
     bars.forEach((bar) => {
         selected_bar = document.querySelector(`#${bar}`)
         
-        console.log(time, time%(saturationRate))
         if(bar === "Saturation"){
             if (Saturation === 0){
                 fail += 1
             } 
             else if (time%(saturationRate) === 0){
                 Saturation -= 1
-                console.log("trigger")
                 selected_bar.innerHTML = `<p>${bar}: ${Saturation}%</p>`
             }
         }
@@ -521,10 +537,36 @@ function updateStatPercentage(time){
             }
         }
         else if ((bar === "Health") && (time%(heathRate) === 0)){    
+            if ((Saturation > 79) && (Hydration > 79) && (Happiness > 79) && (Mental_Health > 79) && (Health < 100)){
+                fail = -1
+            }
             Health -= fail
             selected_bar.innerHTML = `<p>${bar}: ${Health}%</p>`
         }
     })
+    if ((special === "plague") && (time%1 === 0)){
+        let loop = true
+        while ((loop === true) && (saturationRate + hydrationRate + happyRate + mentalRate > 8)){
+            let rN = Math.floor(Math.random()*4)
+            if ((rN === 0) && (saturationRate > 2)){
+                saturationRate -= 1
+                loop = false
+            } else if ((rN === 1) && (hydrationRate > 2)){
+                hydrationRate -= 1
+                loop = false
+            }else if ((rN === 2) && (happyRate > 2)){
+                happyRate -= 1
+                loop = false
+            }else if ((rN === 3) && (mentalRate > 2)){
+                mentalRate -= 1
+                loop = false
+            } 
+
+
+
+            console.log(saturationRate, hydrationRate, happyRate, mentalRate)
+        }
+    }
 }
 
 
