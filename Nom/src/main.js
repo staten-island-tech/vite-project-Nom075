@@ -150,24 +150,80 @@ const pets = [
   },
 ];
 
-let Health = 10;
-let Saturation = 100;
-let Hydration = 100;
-let Mental_Health = 100;
-let Happiness = 100;
+const downloadedData = JSON.parse(localStorage.getItem("saveData"))
 
-let passive_income = 5;
-let workMoney = 1;
-let workUpgradeCost = 75;
+/*     "Health_Rate": healthRate,
+    "Saturation_Rate": saturationRate,
+    "Hydration_Rate": hydrationRate,
+    "Happy_Rate": happyRate,
+    "Mental_Rate": mentalRate,
+    "Health": Health,
+    "Saturation": Saturation,
+    "Happiness": Happiness,
+    "Mental": Mental_Health,
+    "CurrentMoney": Money,
+    "CurrentPassive": passive_income,
+    "moneyPerClick": workMoney,
+    "costToUpgradeMPC": workUpgradeCost,
+    "tickRate": TICK_RATE,
+    "time": time,
+    "pet": pet_object,
+    "inventory": inventory,
 
-const inventory = [];
 
-let current_pet_info = null;
-let Money = 50;
-const TICK_RATE = 1000;
-let time = 0;
-let special = "none";
-let gameID;
+ */
+
+if (downloadedData === null){
+  let pet_object = null
+
+  let Health = 10;
+  let Saturation = 100;
+  let Hydration = 100;
+  let Mental_Health = 100;
+  let Happiness = 100;
+
+  let passive_income = 5;
+  let workMoney = 1;
+  let workUpgradeCost = 75;
+
+  const inventory = [];
+
+  let current_pet_info = null;
+  let Money = 50;
+  const TICK_RATE = 1000;
+  let time = 0;
+  let special = "none";
+
+
+} else{
+
+
+  let pet_object = downloadedData.pet_object
+
+  let Health =  downloadedData.Health
+  let Saturation = downloadedData.Saturation
+  let Hydration = downloadedData.Hydration
+  let Mental_Health = downloadedData.Mental_Health
+  let Happiness = downloadedData.Happiness
+
+  let passive_income = downloadedData.pass;
+  let workMoney = 1;
+  let workUpgradeCost = 75;
+
+  const inventory = [];
+
+  let current_pet_info = null;
+  let Money = 50;
+  const TICK_RATE = 1000;
+  let time = 0;
+  let special = "none";
+
+
+  let gameID;
+}
+
+
+
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
 
 //light and dark
@@ -196,13 +252,15 @@ function enter_game(pet_info) {
   Happiness = petFromList.happiness;
   Mental_Health = petFromList.mental_health;
 
-  heathRate = petFromList.heR * 10;
+  healthRate = petFromList.heR * 10;
   saturationRate = petFromList.sR * 10;
   hydrationRate = petFromList.hyR * 10;
   happyRate = petFromList.haR * 10;
   mentalRate = petFromList.mhR * 10;
 
   special = petFromList.special;
+
+  pet_object = petFromList
 
   const Real_body = document.querySelector(".Real_Body");
   document.querySelector(
@@ -507,6 +565,7 @@ function mainGameLoop() {
   time += 1;
   updateStatPercentage(time);
   moneyBarUpdate(-passive_income / 10);
+  saveStorage();
 }
 
 //Update all of the main bars. Passive decrease stuff
@@ -545,7 +604,7 @@ function updateStatPercentage(time) {
         Happiness -= 1;
         selected_bar.innerHTML = `<p>${bar}: ${Happiness}%</p>`;
       }
-    } else if (bar === "Health" && time % heathRate === 0) {
+    } else if (bar === "Health" && time % healthRate === 0) {
       if (
         Saturation > 79 &&
         Hydration > 79 &&
@@ -563,7 +622,7 @@ function updateStatPercentage(time) {
       }
     }
   });
-  if (special === "plague" && time % 1 === 0) {
+  if (special === "plague" && time % 50 === 0) {
     let loop = true;
     while (
       loop === true &&
@@ -588,6 +647,35 @@ function updateStatPercentage(time) {
     }
   }
 }
+
+function saveStorage(){
+  const dataBase = {
+    "Health_Rate": healthRate,
+    "Saturation_Rate": saturationRate,
+    "Hydration_Rate": hydrationRate,
+    "Happy_Rate": happyRate,
+    "Mental_Rate": mentalRate,
+    "Health": Health,
+    "Saturation": Saturation,
+    "Happiness": Happiness,
+    "Mental": Mental_Health,
+    "CurrentMoney": Money,
+    "CurrentPassive": passive_income,
+    "moneyPerClick": workMoney,
+    "costToUpgradeMPC": workUpgradeCost,
+    "tickRate": TICK_RATE,
+    "time": time,
+    "pet": pet_object,
+    "inventory": inventory,
+    "special": special,
+
+  }
+
+
+  localStorage.setItem("saveData", JSON.stringify(dataBase))
+}
+
+
 
 light_and_dark();
 adopt();
