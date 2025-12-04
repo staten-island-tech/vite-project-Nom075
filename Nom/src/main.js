@@ -1,3 +1,5 @@
+
+
 const bars = [
   "Saturation",
   "Hydration",
@@ -152,7 +154,7 @@ const pets = [
 
 const downloadedData = JSON.parse(localStorage.getItem("saveData"))
 
-/*     "Health_Rate": healthRate,
+/*  "Health_Rate": healthRate,
     "Saturation_Rate": saturationRate,
     "Hydration_Rate": hydrationRate,
     "Happy_Rate": happyRate,
@@ -172,63 +174,55 @@ const downloadedData = JSON.parse(localStorage.getItem("saveData"))
 
 
  */
+let pet_object = null
 
-if (downloadedData === null){
-  let pet_object = null
+let Health = 10;
+let Saturation = 100;
+let Hydration = 100;
+let Mental_Health = 100;
+let Happiness = 100;
 
-  let Health = 10;
-  let Saturation = 100;
-  let Hydration = 100;
-  let Mental_Health = 100;
-  let Happiness = 100;
+let passive_income = 5;
+let workMoney = 1;
+let workUpgradeCost = 75;
 
-  let passive_income = 5;
-  let workMoney = 1;
-  let workUpgradeCost = 75;
+let inventory = [];
 
-  const inventory = [];
-
-  let current_pet_info = null;
-  let Money = 50;
-  const TICK_RATE = 1000;
-  let time = 0;
-  let special = "none";
+let current_pet_info = null;
+let Money = 50;
+let TICK_RATE = 1000;
+let time = 0;
+let special = "none";
 
 
-} else{
+if (!(downloadedData === null)){
+  Health =  downloadedData.HealthDD
+  Saturation = downloadedData.SaturationDD
+
+  Hydration = downloadedData.HydrationDD
+  Mental_Health = downloadedData.MentalDD
+  Happiness = downloadedData.HappinessDD
+
+  passive_income = downloadedData.CurrentPassiveDD;
+  workMoney = downloadedData.moneyPerClickDD;
+  workUpgradeCost = downloadedData.costToUpgradeMPCDD;
+
+  inventory = downloadedData.inventoryDD;
+  Money = downloadedData.CurrentMoneyDD;
+  TICK_RATE = downloadedData.tickRateDD;
+  time = downloadedData.timeDD;
 
 
-  let pet_object = downloadedData.pet_object
-
-  let Health =  downloadedData.Health
-  let Saturation = downloadedData.Saturation
-  let Hydration = downloadedData.Hydration
-  let Mental_Health = downloadedData.Mental_Health
-  let Happiness = downloadedData.Happiness
-
-  let passive_income = downloadedData.pass;
-  let workMoney = 1;
-  let workUpgradeCost = 75;
-
-  const inventory = [];
-
-  let current_pet_info = null;
-  let Money = 50;
-  const TICK_RATE = 1000;
-  let time = 0;
-  let special = "none";
-
-
-  let gameID;
 }
 
+let gameID;
 
 
 //0: Health, 1: Saturation, 2: Hydration, 3: Mental Health, 4: Happiness
 
 //light and dark
 function light_and_dark() {
-  modeBTN = document.querySelector(".mode");
+  const modeBTN = document.querySelector(".mode");
   modeBTN.addEventListener("click", function () {
     if (document.body.classList.contains("dark")) {
       document.body.classList.add("light");
@@ -240,27 +234,57 @@ function light_and_dark() {
   });
 }
 
+function reset(){
+  const resetBTN = document.querySelector(".reset")
+  resetBTN.addEventListener("click", function(){
+    clearInterval(gameID)
+    localStorage.clear()
+    window.location.reload()
+  })
+
+}
+
 //initial game start page and UI
 function enter_game(pet_info) {
-  const petFromList = pets.find(
-    (pet) => pet_info.children[0].textContent === pet.name
-  );
 
-  Health = petFromList.health;
-  Saturation = petFromList.saturation;
-  Hydration = petFromList.hydration;
-  Happiness = petFromList.happiness;
-  Mental_Health = petFromList.mental_health;
+  pet_object = pet_info
 
-  healthRate = petFromList.heR * 10;
-  saturationRate = petFromList.sR * 10;
-  hydrationRate = petFromList.hyR * 10;
-  happyRate = petFromList.haR * 10;
-  mentalRate = petFromList.mhR * 10;
 
-  special = petFromList.special;
+  if (downloadedData === null){
+    petFromList = pets.find((pet) => pet_info.children[0].textContent === pet.name
+  )} 
+  else if (!(downloadedData === null)){
+    pet_object = downloadedData.petDD
+    petFromList = pet_object
+  }
 
-  pet_object = petFromList
+  if (downloadedData === null){
+    Health = petFromList.health;
+    Saturation = petFromList.saturation;
+    Hydration = petFromList.hydration;
+    Happiness = petFromList.happiness;
+    Mental_Health = petFromList.mental_health;
+
+    healthRate = petFromList.heR * 10;
+    saturationRate = petFromList.sR * 10;
+    hydrationRate = petFromList.hyR * 10;
+    happyRate = petFromList.haR * 10;
+    mentalRate = petFromList.mhR * 10;
+
+    special = petFromList.special;
+  }
+
+
+  if (!(downloadedData === null)){
+    healthRate = downloadedData.Health_RateDD
+    saturationRate = downloadedData.Saturation_RateDD
+    hydrationRate = downloadedData.Hydration_RateDD
+    happyRate = downloadedData.Happy_RateDD
+    mentalRate = downloadedData.Mental_RateDD
+    special = downloadedData.specialDD
+  }
+
+
 
   const Real_body = document.querySelector(".Real_Body");
   document.querySelector(
@@ -555,6 +579,7 @@ function adopt() {
   buttons.forEach((btn) => {
     btn.addEventListener("click", function (event) {
       current_pet_info = event.target.closest(".card");
+
       enter_game(current_pet_info);
     });
   });
@@ -565,7 +590,11 @@ function mainGameLoop() {
   time += 1;
   updateStatPercentage(time);
   moneyBarUpdate(-passive_income / 10);
-  saveStorage();
+  if (!(Health < 1)){
+    saveStorage();
+  }else{
+    localStorage.clear()
+  }
 }
 
 //Update all of the main bars. Passive decrease stuff
@@ -574,35 +603,30 @@ function updateStatPercentage(time) {
   let fail = 0;
 
   bars.forEach((bar) => {
-    selected_bar = document.querySelector(`#${bar}`);
 
     if (bar === "Saturation") {
       if (Saturation === 0) {
         fail += 1;
       } else if (time % saturationRate === 0) {
         Saturation -= 1;
-        selected_bar.innerHTML = `<p>${bar}: ${Saturation}%</p>`;
       }
     } else if (bar === "Hydration") {
       if (Hydration === 0) {
         fail += 1;
       } else if (time % hydrationRate === 0) {
         Hydration -= 1;
-        selected_bar.innerHTML = `<p>${bar}: ${Hydration}%</p>`;
       }
     } else if (bar === "Mental_Health") {
       if (Mental_Health === 0) {
         fail += 1;
       } else if (time % mentalRate === 0) {
         Mental_Health -= 1;
-        selected_bar.innerHTML = `<p>${bar}: ${Mental_Health}%</p>`;
       }
     } else if (bar === "Happiness") {
       if (Happiness === 0) {
         fail += 1;
       } else if (time % happyRate === 0) {
         Happiness -= 1;
-        selected_bar.innerHTML = `<p>${bar}: ${Happiness}%</p>`;
       }
     } else if (bar === "Health" && time % healthRate === 0) {
       if (
@@ -616,13 +640,19 @@ function updateStatPercentage(time) {
       }
       Health -= fail;
       selected_bar.innerHTML = `<p>${bar}: ${Health}%</p>`;
+
+
+
       if (Health < 1){
+
         clearInterval(gameID)
+        localStorage.clear()
         window.location.reload()
+
       }
     }
   });
-  if (special === "plague" && time % 50 === 0) {
+  if (special === "plague" && time % 1 === 0) {
     let loop = true;
     while (
       loop === true &&
@@ -643,31 +673,38 @@ function updateStatPercentage(time) {
         loop = false;
       }
 
-      console.log(saturationRate, hydrationRate, happyRate, mentalRate);
+
     }
   }
+  document.querySelector(`#Saturation`).innerHTML = `<p>Saturation: ${Saturation}%</p>`
+  document.querySelector(`#Hydration`).innerHTML = `<p>Hydration: ${Hydration}%</p>`
+  document.querySelector(`#Happiness`).innerHTML = `<p>Happiness: ${Happiness}%</p>`
+  document.querySelector(`#Mental_Health`).innerHTML = `<p>Mental_Health: ${Mental_Health}%</p>`
+  document.querySelector(`#Health`).innerHTML = `<p>Health: ${Health}%</p>`
+
 }
 
 function saveStorage(){
   const dataBase = {
-    "Health_Rate": healthRate,
-    "Saturation_Rate": saturationRate,
-    "Hydration_Rate": hydrationRate,
-    "Happy_Rate": happyRate,
-    "Mental_Rate": mentalRate,
-    "Health": Health,
-    "Saturation": Saturation,
-    "Happiness": Happiness,
-    "Mental": Mental_Health,
-    "CurrentMoney": Money,
-    "CurrentPassive": passive_income,
-    "moneyPerClick": workMoney,
-    "costToUpgradeMPC": workUpgradeCost,
-    "tickRate": TICK_RATE,
-    "time": time,
-    "pet": pet_object,
-    "inventory": inventory,
-    "special": special,
+    "Health_RateDD": healthRate,
+    "Saturation_RateDD": saturationRate,
+    "Hydration_RateDD": hydrationRate,
+    "Happy_RateDD": happyRate,
+    "Mental_RateDD": mentalRate,
+    "HealthDD": Health,
+    "SaturationDD": Saturation,
+    "HydrationDD": Hydration,
+    "HappinessDD": Happiness,
+    "MentalDD": Mental_Health,
+    "CurrentMoneyDD": Money,
+    "CurrentPassiveDD": passive_income,
+    "moneyPerClickDD": workMoney,
+    "costToUpgradeMPCDD": workUpgradeCost,
+    "tickRateDD": TICK_RATE,
+    "timeDD": time,
+    "petDD": petFromList,
+    "inventoryDD": inventory,
+    "specialDD": special,
 
   }
 
@@ -678,4 +715,11 @@ function saveStorage(){
 
 
 light_and_dark();
-adopt();
+reset();
+
+if (downloadedData === null){
+  adopt();
+} else{
+  enter_game()
+}
+

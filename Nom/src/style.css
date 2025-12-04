@@ -187,7 +187,7 @@ body{
   color: var(--textColor);
 }
 
-.mode{
+.mode, .reset{
   width: 100px;
   height: 100px;
 }
