@@ -45,40 +45,48 @@ const Shop = [
     use: { target: "Hydration", effect: 15 },
   },
   {
+    Name: "Gatorade",
+    image: "drinks/gatorade.webp",
+    description: "Great rehydration with all the electrolytes! Hydration +75%.",
+    price: 27,
+    use: { target: "Hydration", effect: 75},
+  },  
+  {
     Name: "Elixir of Water",
     image: "drinks/water.png",
-    description: "I think it's water... Hydration +75%",
-    price: 27,
-    use: { target: "Hydration", effect: 75 },
-  },
-  {
-    Name: "Bag of Blood",
-    image: "drinks/Blood.png",
-    description: "Don't drink this",
+    description: "I think it's water... Hydration +100%.",
     price: 40,
     use: { target: "Hydration", effect: 100},
   },
   {
-    Name: "Toy",
-    image: "other/duck.jpg",
-    description: "Toy, 10",
-    price: 10,
+    Name: "Lake Water",
+    image: "drinks/LakeWater.png",
+    description: "I... don't know if you should drink this...",
+    price: 0,
+    use: { target: "Hydration", effect: 1},
+  },
+  {
+    Name: "(Paid) Meditation",
+    image: "mental_HP/Meditation.png",
+    description: "Just meditate for +10% wellness for your Mental Health.",
+    price: 45,
     use: { target: "Mental_Health", effect: 10 },
   },
   {
-    Name: "Chao Jie",
-    image: "happy/ChaoJie.png",
-    description: "Chaojie, 10",
-    price: 10,
-    use: { target: "Happiness", effect: 10 },
+    Name: "Therapy",
+    image: "mental_HP/Therapy.png",
+    description: "One session... It costs alot, but your mind will feel 50% better!!",
+    price: 112,
+    use: { target: "Mental_Health", effect: 50 },
   },
-  {
-    Name: "Vial of Health",
-    image: "other/duck.jpg",
-    description: "Vial of Health, 10",
-    price: 10,
-    use: { target: "Health", effect: 10 },
-  },
+
+/*   {
+    Name: "Bag of Blood",
+    image: "drinks/Blood.png",
+    description: "Don't drink this...",
+    price: 64,
+    use: { target: "Health", effect: 10},
+  }, */
 ];
 
 const pets = [
@@ -501,7 +509,7 @@ function activateButtonInventory() {
         (item) => card.children[0].textContent === item.Name
       );
 
-      if (inventory_item.quantity > 1) {
+      if (inventory_item.quantity > 0) {
         inventory_item.quantity -= 1;
         card.children[3].textContent = `Quantity: ${inventory_item.quantity}`;
 
@@ -523,17 +531,23 @@ function activateButtonInventory() {
 
           selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Saturation}%</p>`;
         } else if (inventory_item.use.target === "Hydration") {
-          if (Hydration + inventory_item.use.effect > 100) {
-            Hydration = 100;
-          } else {
-            Hydration += inventory_item.use.effect;
+            if (inventory_item.Name === "Lake Water") {
+              Hydration += Math.round(Math.random() * 20 - 12);
+            }
+            else if (Hydration + inventory_item.use.effect > 100) {
+              Hydration = 100;
+            } else{
+              Hydration += inventory_item.use.effect;
           }
           selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Hydration}%</p>`;
         } else if (inventory_item.use.target === "Mental_Health") {
+          console.log("TRIGGER ME")
           if (Mental_Health + inventory_item.use.effect > 100) {
             Mental_Health = 100;
+            console.log("TRIGGER 100")
           } else {
             Mental_Health += inventory_item.use.effect;
+            console.log("TRIGGER NORMAL")
           }
 
           selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Mental_Health}%</p>`;
@@ -550,9 +564,9 @@ function activateButtonInventory() {
           } else {
             Health += inventory_item.use.effect;
           }
-          selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Health}%</p>`;
         }
-      } else if (inventory_item.quantity === 1) {
+      } 
+      if (inventory_item.quantity === 0) {
         const index = inventory.indexOf(inventory_item);
         inventory.splice(index, 1);
         card.remove();
@@ -639,12 +653,11 @@ function updateStatPercentage(time) {
         fail = -1;
       }
       Health -= fail;
-      selected_bar.innerHTML = `<p>${bar}: ${Health}%</p>`;
+      Health.innerHTML = `<p>Health: ${Health}%</p>`;
 
-
-
+      console.log(Health < 1)
       if (Health < 1){
-
+        console.log("StupidBug")
         clearInterval(gameID)
         localStorage.clear()
         window.location.reload()
@@ -680,6 +693,7 @@ function updateStatPercentage(time) {
   document.querySelector(`#Hydration`).innerHTML = `<p>Hydration: ${Hydration}%</p>`
   document.querySelector(`#Happiness`).innerHTML = `<p>Happiness: ${Happiness}%</p>`
   document.querySelector(`#Mental_Health`).innerHTML = `<p>Mental_Health: ${Mental_Health}%</p>`
+  console.log(Mental_Health)
   document.querySelector(`#Health`).innerHTML = `<p>Health: ${Health}%</p>`
 
 }
