@@ -26,7 +26,7 @@ const Shop = [
   {
     Name: "Golden Carrot",
     image: "Food/GOLDcarrot.png",
-    description: "Burger in a vial. Saturation +75%.",
+    description: "I swear it is true gold. Saturation +75%.",
     price: 100,
     use: { target: "Saturation", effect: 75 },
   },
@@ -79,6 +79,49 @@ const Shop = [
     price: 112,
     use: { target: "Mental_Health", effect: 50 },
   },
+  {
+    Name: "Full Mental Exam",
+    image: "mental_HP/MentalExam.png",
+    description: "Full mental exam and treatment! 80-100% efficiency!",
+    price: 345,
+    use: { target: "Mental_Health", effect: 5},
+  },
+  {
+    Name: "Lobotomy",
+    image: "mental_HP/Lobotomy.png",
+    description: "Uh this is still experimental...",
+    price: 75,
+    use: { target: "Mental_Health", effect: 5},
+  },
+  {
+    Name: "Ticket of Fun",
+    image: "Happy/Ticket.png",
+    description: "What do you want to do? +15% Happiness.",
+    price: 55,
+    use: { target: "Happiness", effect: 15},
+  },
+  {
+    Name: "Elite Gaming Session",
+    image: "Happy/VideoGame.png",
+    description: "A good game always gives 30% Happiness.",
+    price: 100,
+    use: { target: "Happiness", effect: 30},
+  },
+  {
+    Name: "Friend Day",
+    image: "Happy/Friends.png",
+    description: "A day with your friends always restore 75% Happiness. You're paying though!",
+    price: 210,
+    use: { target: "Happiness", effect: 75},
+  },
+  {
+    Name: "Mystery Gift",
+    image: "Happy/Gift.png",
+    description: "The question to ask: is it good...?",
+    price: 35,
+    use: { target: "Happiness", effect: 5},
+  },
+
 
 /*   {
     Name: "Bag of Blood",
@@ -247,6 +290,7 @@ function reset(){
   resetBTN.addEventListener("click", function(){
     clearInterval(gameID)
     localStorage.clear()
+    window.alert("Bro gave up.")
     window.location.reload()
   })
 
@@ -529,40 +573,62 @@ function activateButtonInventory() {
             Saturation = 0;
           }
 
-          selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Saturation}%</p>`;
         } else if (inventory_item.use.target === "Hydration") {
             if (inventory_item.Name === "Lake Water") {
               Hydration += Math.round(Math.random() * 20 - 12);
             }
-            else if (Hydration + inventory_item.use.effect > 100) {
-              Hydration = 100;
-            } else{
+            else{
               Hydration += inventory_item.use.effect;
           }
-          selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Hydration}%</p>`;
-        } else if (inventory_item.use.target === "Mental_Health") {
-          console.log("TRIGGER ME")
-          if (Mental_Health + inventory_item.use.effect > 100) {
-            Mental_Health = 100;
-            console.log("TRIGGER 100")
-          } else {
-            Mental_Health += inventory_item.use.effect;
-            console.log("TRIGGER NORMAL")
+
+            if (Hydration > 100) {
+              Hydration = 100;
+          } else if (Hydration < 0) {
+              Hydration = 0;
           }
 
-          selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Mental_Health}%</p>`;
+
+        } else if (inventory_item.use.target === "Mental_Health") {
+          if (inventory_item.Name === "Lobotomy"){
+            if ((Math.round(Math.random() * 20)) > 15){
+              Mental_Health += 100
+            } else{
+              Mental_Health -= 100
+            }
+          }
+          else if (inventory_item.Name === "Full Mental Exam"){
+            Mental_Health += (100 - Math.round(Math.random()*20))
+          }
+          else {
+            Mental_Health += inventory_item.use.effect;
+          }
+
+          if (Mental_Health > 100) {
+              Mental_Health = 100;
+          } else if (Mental_Health < 0) {
+              Mental_Health = 0;
+          }
+
         } else if (inventory_item.use.target === "Happiness") {
-          if (Happiness + inventory_item.use.effect > 100) {
-            Happiness = 100;
+          if (inventory_item.Name === "Mystery Gift") {
+            Happiness += Math.round(Math.random() *7);
           } else {
             Happiness += inventory_item.use.effect;
           }
-          selected_bar.innerHTML = `<p>${inventory_item.use.target}: ${Happiness}%</p>`;
+          
+
+          if (Happiness > 100) {
+              Happiness = 100;
+          } else if (Happiness < 0) {
+              Happiness = 0;
+          }
         } else if (inventory_item.use.target === "Health") {
-          if (Health + inventory_item.use.effect > 100) {
-            Health = 100;
-          } else {
             Health += inventory_item.use.effect;
+
+          if (Health > 100) {
+              Health = 100;
+          } else if (Health< 0) {
+              Health = 0;
           }
         }
       } 
@@ -613,7 +679,6 @@ function mainGameLoop() {
 
 //Update all of the main bars. Passive decrease stuff
 function updateStatPercentage(time) {
-  let selected_bar = null;
   let fail = 0;
 
   bars.forEach((bar) => {
@@ -634,13 +699,13 @@ function updateStatPercentage(time) {
       if (Mental_Health === 0) {
         fail += 1;
       } else if (time % mentalRate === 0) {
-        Mental_Health -= 1;
+        Mental_Health -= (Math.round(Math.random()*2));
       }
     } else if (bar === "Happiness") {
       if (Happiness === 0) {
         fail += 1;
       } else if (time % happyRate === 0) {
-        Happiness -= 1;
+        Happiness -= (Math.round(Math.random()*3));
       }
     } else if (bar === "Health" && time % healthRate === 0) {
       if (
@@ -655,17 +720,17 @@ function updateStatPercentage(time) {
       Health -= fail;
       Health.innerHTML = `<p>Health: ${Health}%</p>`;
 
-      console.log(Health < 1)
       if (Health < 1){
-        console.log("StupidBug")
         clearInterval(gameID)
         localStorage.clear()
+        document.querySelector("#Health").innerHTML = `<p>Health: 0%     DEAD!!!</p>`
+        window.alert(`Your pet died lol. You suck.`)
         window.location.reload()
 
       }
     }
   });
-  if (special === "plague" && time % 1 === 0) {
+  if (special === "plague" && time % 50 === 0) {
     let loop = true;
     while (
       loop === true &&
@@ -693,7 +758,6 @@ function updateStatPercentage(time) {
   document.querySelector(`#Hydration`).innerHTML = `<p>Hydration: ${Hydration}%</p>`
   document.querySelector(`#Happiness`).innerHTML = `<p>Happiness: ${Happiness}%</p>`
   document.querySelector(`#Mental_Health`).innerHTML = `<p>Mental_Health: ${Mental_Health}%</p>`
-  console.log(Mental_Health)
   document.querySelector(`#Health`).innerHTML = `<p>Health: ${Health}%</p>`
 
 }

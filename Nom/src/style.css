@@ -58,11 +58,15 @@ body{
   border-radius: 20px;
 }
 
-.Real_Body{
+.Real_Body, .settings{
   width: 100%;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.settings button{
+  margin: 20px;
 }
 
 .items{
