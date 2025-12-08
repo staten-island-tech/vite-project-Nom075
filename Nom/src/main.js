@@ -655,7 +655,7 @@ function adopt() {
     );
   });
 
-  buttons = document.querySelectorAll(".Adopt");
+  const buttons = document.querySelectorAll(".Adopt");
   buttons.forEach((btn) => {
     btn.addEventListener("click", function (event) {
       current_pet_info = event.target.closest(".card");
