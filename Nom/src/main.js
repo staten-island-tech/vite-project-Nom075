@@ -226,12 +226,19 @@ const downloadedData = JSON.parse(localStorage.getItem("saveData"))
 
  */
 let pet_object = null
+let petFromList = null
 
 let Health = 10;
 let Saturation = 100;
 let Hydration = 100;
 let Mental_Health = 100;
 let Happiness = 100;
+
+let healthRate = 0
+let saturationRate = 0
+let hydrationRate = 0
+let happyRate = 0
+let mentalRate = 0
 
 let passive_income = 5;
 let workMoney = 1;
@@ -391,7 +398,7 @@ function enter_game(pet_info) {
 //activates shop stuff
 function filter_stuff(list, filter_type) {
   const filter_buttons = Array.from(document.querySelectorAll(".filter"));
-  btn = filter_buttons.find((btn) => btn.textContent === filter_type);
+  const btn = filter_buttons.find((btn) => btn.textContent === filter_type);
   btn.addEventListener("click", function () {
     document.querySelector(".items").innerHTML = " ";
 
@@ -482,7 +489,7 @@ function filter_MoneyTab() {
 }
 
 function activateButtonShop() {
-  allItemButton = document.querySelectorAll(".ShopitemButton");
+  const allItemButton = document.querySelectorAll(".ShopitemButton");
   allItemButton.forEach((btn) => {
     btn.addEventListener("click", function () {
       const card = btn.closest(".item_card");
@@ -545,11 +552,11 @@ function moneyBarUpdate(subtractMoney) {
 }
 
 function activateButtonInventory() {
-  allInvButton = Array.from(document.querySelectorAll(".InventoryitemButton"));
+  const allInvButton = Array.from(document.querySelectorAll(".InventoryitemButton"));
   allInvButton.forEach((btn) => {
     btn.addEventListener("click", function (event) {
       const card = event.target.closest(".item_card");
-      inventory_item = inventory.find(
+      const inventory_item = inventory.find(
         (item) => card.children[0].textContent === item.Name
       );
 
@@ -718,7 +725,7 @@ function updateStatPercentage(time) {
         fail = -1;
       }
       Health -= fail;
-      Health.innerHTML = `<p>Health: ${Health}%</p>`;
+      document.querySelector("#Health").innerHTML = `<p>Health: ${Health}%</p>`;
 
       if (Health < 1){
         clearInterval(gameID)
